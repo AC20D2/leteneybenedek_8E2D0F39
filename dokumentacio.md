@@ -4,6 +4,7 @@ Feladatomban egy regisztrációs, bejelentkezős menü lesz, ami hasonlíthat eg
 - Nem adatbázis alapú, szóval a regisztrációt a sütikben tárolja
 - Az oldal frissítésekor 2 alapértelmezett fiók van
 - Admin, Oktató, Tanuló típusú fiókok
+- Html, CSS, JavaScript programozási nyelveket használok
 
 | Jogok | Admin | Oktató | Tanuló | 
 | --- | --- | --- | --- |
