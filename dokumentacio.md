@@ -3,6 +3,12 @@ Feladatomban egy regisztrációs, bejelentkezős menü lesz, ami hasonlíthat eg
 ## Működése
 - Nem adatbázis alapú, szóval a regisztrációt a sütikben tárolja
 - Az oldal frissítésekor 2 alapértelmezett fiók van
+
+| Felhasználók | Email | Jelszó | 
+| --- | --- | --- |
+| Admin | admin@ganziskola.hu | admin |
+| Tanuló | tomika.kovacs@ganziskola.hu | tompaa |
+
 - Admin, Oktató, Tanuló típusú fiókok
 - Html, CSS, JavaScript programozási nyelveket használok
 
