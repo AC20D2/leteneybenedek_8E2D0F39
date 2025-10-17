@@ -12,6 +12,7 @@ let users = [
 ];
 let bejelentkezettFelhasznalo = null;
 let szamlalas = 0
+let letezik = false
 for (let i = 0; i < users.length; i++) {
         szamlalas++
     }
@@ -60,13 +61,19 @@ function toggleJelszoLathatosag() {
     jelszoMezo.type = jelszoMezo.type === "password" ? "text" : "password";
 }
 function modositSajatJelszo() {
-    let container = document.getElementById("titkos");
-    container.innerHTML += `
-        <div>
-            <p class="reg">Új jelszó: <input type="password" id="uj-jelszo"></p>
-            <button onclick="mentSajatJelszo()">Mentés</button>
-        </div>
-    `;
+    if(!letezik){
+        letezik = true
+        console.log(letezik)
+        let container = document.getElementById("titkos");
+        container.innerHTML += `
+            <div>
+                <p class="reg">Új jelszó: <input type="password" id="uj-jelszo"></p>
+                <button onclick="mentSajatJelszo()">Mentés</button>
+            </div>
+        `;
+    } else{
+        console.log(letezik)
+    }
 }
 function mentSajatJelszo() {
     let ujJelszo = document.getElementById("uj-jelszo").value;
