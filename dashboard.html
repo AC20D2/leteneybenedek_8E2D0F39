@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="dashboard">
+            <div id="form">
+            </div>
+            <div id="titkos">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <b>Készítette:</b><br><br>Leteney Benedek<br><br>
+        <a href="https://github.com/AC20D2">GitHub</a>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!bejelentkezettFelhasznalo) {
+                window.location.href = 'login.html';
+            } else {
+                megjelenitProfil();
+            }
+        });
+    </script>
+</body>
+</html>

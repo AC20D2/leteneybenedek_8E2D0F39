@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bejelentkezés</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="belep">
+            <div id="form">
+                <form>
+                    <h1>Bejelentkezés</h1>
+                    <br>
+                    <div>
+                        <label for="email">Email cím:</label><br>
+                        <input type="text" id="email"><br><br>
+                    </div>
+                </form>
+                <div>
+                    <form>  
+                        <label for="jelszo">Jelszó:</label><br>
+                        <input type="password" id="jelszo">
+                    </form>
+                    <br>
+                    <button onclick="belepes()" id="belepes">Bejelentkezés</button><br><br><br>
+                    <p class="reg">Nincs még fiókod?</p>
+                    <button class="regi" onclick="location.href='register.html'">Regisztráció</button>
+                </div>
+            </div>
+            <div id="titkos"></div>
+        </div>
+    </div>
+
+    <footer>
+        <b>Készítette:</b><br><br>Leteney Benedek<br><br>
+        <a href="https://github.com/AC20D2">GitHub</a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

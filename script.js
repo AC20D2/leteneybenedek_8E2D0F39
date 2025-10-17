@@ -1,4 +1,4 @@
-let users = [
+let users = JSON.parse(localStorage.getItem('users')) || [
     {
         email: "admin@ganziskola.hu",
         jelszo: "admin",
@@ -10,45 +10,24 @@ let users = [
         szerepkor: "tanuló",
     }
 ];
-let bejelentkezettFelhasznalo = null;
-let szamlalas = 0
-let letezik = false
-for (let i = 0; i < users.length; i++) {
-        szamlalas++
-    }
+
+localStorage.setItem('users', JSON.stringify(users));
+
+let bejelentkezettFelhasznalo = JSON.parse(localStorage.getItem('bejelentkezettFelhasznalo'));
+let szamlalas = users.length;
+let letezik = false;
 
 function belepes() {
     let bEmail = document.getElementById("email").value;
     let bJelszo = document.getElementById("jelszo").value;
     let felhasznalo = users.find(user => user.email === bEmail);
 
-
     if (felhasznalo) {
         if (felhasznalo.jelszo === bJelszo) {
             bejelentkezettFelhasznalo = felhasznalo;
-            let nev = bEmail.split("@")[0]
-                .split(".")
-                .map(part => part.replace(/[0-9]/g, ''))
-                .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-                .join(" ");
+            localStorage.setItem('bejelentkezettFelhasznalo', JSON.stringify(bejelentkezettFelhasznalo));
 
-            document.getElementById("form").innerHTML = `<h2>Üdvözlünk <span style="font-weight: bold;">${nev}</span> a profilodban</h2>`;
-            document.getElementById("form").innerHTML += `<h4>Szerepkör: <span id="szkor" style="font-weight: bold;">${felhasznalo.szerepkor.toUpperCase()}</span></h4>`
-            document.getElementById("form").innerHTML += `<p>Jelszó: <input type='password' id='megtekint-jelszo' value='${felhasznalo.jelszo}' readonly> <button onclick='toggleJelszoLathatosag()'>Jelszó megtekintése</button></p>`;
-            
-
-            if (felhasznalo.szerepkor === "admin") {
-                document.getElementById("titkos").innerHTML =
-                    `<button class='fel' onclick='felhasznalok()'>Felhasználók kezelése</button>
-                    <div id='admin-panel'></div>
-                    <p id="szamolas">Összes felhasználó: ${szamlalas} db</p>
-                    <br><button class='fel' onclick='modositSajatJelszo()'>Jelszó módosítása</button>
-                    <br><button class='visz' onclick='belepesOldal()'>Kijelentkezés</button>`;
-            } else {
-                document.getElementById("titkos").innerHTML =
-                    `<button class='fel' onclick='modositSajatJelszo()'>Jelszó módosítása</button>
-                    <br><button class='visz' onclick='belepesOldal()'>Kijelentkezés</button>`;
-            }
+            window.location.href = 'dashboard.html';
         } else {
             showPopup("Téves felhasználónév vagy jelszó!", "red");
         }
@@ -56,25 +35,44 @@ function belepes() {
         showPopup("Téves felhasználónév vagy jelszó!", "red");
     }
 }
-function toggleJelszoLathatosag() {
-    let jelszoMezo = document.getElementById("megtekint-jelszo");
-    jelszoMezo.type = jelszoMezo.type === "password" ? "text" : "password";
-}
-function modositSajatJelszo() {
-    if(!letezik){
-        letezik = true
-        console.log(letezik)
-        let container = document.getElementById("titkos");
-        container.innerHTML += `
-            <div>
-                <p class="reg">Új jelszó: <input type="password" id="uj-jelszo"></p>
-                <button onclick="mentSajatJelszo()">Mentés</button>
-            </div>
-        `;
-    } else{
-        console.log(letezik)
+
+function megjelenitProfil() {
+    if (!bejelentkezettFelhasznalo) {
+
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    let nev = bejelentkezettFelhasznalo.email.split("@")[0]
+        .split(".")
+        .map(part => part.replace(/[0-9]/g, ''))
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+
+    document.getElementById("form").innerHTML = `<h2>Üdvözlünk <span style="font-weight: bold;">${nev}</span> a profilodban</h2>`;
+    document.getElementById("form").innerHTML += `<h4>Szerepkör: <span id="szkor" style="font-weight: bold;">${bejelentkezettFelhasznalo.szerepkor.toUpperCase()}</span></h4>`;
+    document.getElementById("form").innerHTML += `<p>Jelszó: <input type='password' id='megtekint-jelszo' value='${bejelentkezettFelhasznalo.jelszo}' readonly> <button onclick='toggleJelszoLathatosag()'>Jelszó megtekintése</button></p>`;
+
+    if (bejelentkezettFelhasznalo.szerepkor === "admin") {
+        document.getElementById("titkos").innerHTML =
+            `<button class='fel' onclick='felhasznalok()'>Felhasználók kezelése</button>
+            <div id='admin-panel'></div>
+            <p id="szamolas">Összes felhasználó: ${szamlalas} db</p>
+            <br><button class='fel' onclick='modositSajatJelszo()'>Jelszó módosítása</button>
+            <br><button class='visz' onclick='kijelentkezes()'>Kijelentkezés</button>`;
+    } else {
+        document.getElementById("titkos").innerHTML =
+            `<button class='fel' onclick='modositSajatJelszo()'>Jelszó módosítása</button>
+            <br><button class='visz' onclick='kijelentkezes()'>Kijelentkezés</button>`;
     }
 }
+
+function kijelentkezes() {
+    bejelentkezettFelhasznalo = null;
+    localStorage.removeItem('bejelentkezettFelhasznalo');
+    window.location.href = 'login.html';
+}
+
 function mentSajatJelszo() {
     let ujJelszo = document.getElementById("uj-jelszo").value;
     if (ujJelszo.length < 6) {
@@ -87,27 +85,36 @@ function mentSajatJelszo() {
     }
     bejelentkezettFelhasznalo.jelszo = ujJelszo;
     users = users.map(user => user.email === bejelentkezettFelhasznalo.email ? bejelentkezettFelhasznalo : user);
+
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('bejelentkezettFelhasznalo', JSON.stringify(bejelentkezettFelhasznalo));
+    
     showPopup("Jelszó sikeresen módosítva!", "green");
-    belepesOldal()
+
+    megjelenitProfil();
 }
+
 function register() {
     let rEmail = document.getElementById("ujEmail").value;
     let rJelszo = document.getElementById("ujJelszo").value;
     let emailMinta = /^[^@]+@ganziskola\.hu$/;
+    
     if (!emailMinta.test(rEmail)) {
         showPopup("Érvénytelen email! Csak @ganziskola.hu végződésű, érvényes email engedélyezett.", "red");
         return;
     }
+    
     if (rJelszo.length < 6) {
         showPopup("A jelszónak legalább 6 karakter hosszúnak kell lennie!", "red");
         return;
     }
+    
     if (users.some(user => user.email === rEmail)) {
         showPopup("Ez az email cím már regisztrálva van!", "red");
         return;
     }
+    
     if (rEmail.endsWith("@ganziskola.hu") && rJelszo.length >= 6 && !(users.some(user => user.email === rEmail))) {
-
         document.getElementById("lent").innerHTML = `
             <form>    
                 <label for="megerosit">Jelszó megerősítése:</label><br>
@@ -115,14 +122,32 @@ function register() {
             </form>
             <br>
             <button onclick="megerosites('${rJelszo}', '${rEmail}')" id="belepes">Regisztráció</button><br><br><br>
-            <p class="reg">Van már fiókod?</p><button class="regi" onclick="belepesOldal()">Bejelentkezés</button>`
+            <p class="reg">Van már fiókod?</p><button class="regi" onclick="location.href='login.html'">Bejelentkezés</button>`;
     }
-
 }
+
+function megerosites(rJelszo, rEmail) {
+    let megerosit = document.getElementById("megerosit").value;
+    if (megerosit !== rJelszo) {
+        showPopup("A jelszavak nem egyeznek!", "red");
+        return;
+    }
+    
+    users.push({ email: rEmail, jelszo: rJelszo, szerepkor: "tanuló" });
+
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    showPopup("Sikeres regisztráció!", "green");
+    szamlalas++;
+    
+    window.location.href = 'login.html';
+}
+
 function adminRegister() {
     let adEmail = document.getElementById("adEmail").value;
     let adJelszo = document.getElementById("adJelszo").value;
     let adSzerepkor = document.getElementById("adSzerepkor").value;
+    
     if (!adEmail.endsWith("@ganziskola.hu")) {
         showPopup("Csak @ganziskola.hu végződésű email cím engedélyezett!", "red");
         return;
@@ -132,30 +157,104 @@ function adminRegister() {
         showPopup("A jelszónak legalább 6 karakter hosszúnak kell lennie!", "red");
         return;
     }
+    
     if (users.some(user => user.email === adEmail)) {
         showPopup("Ez az email cím már regisztrálva van!", "red");
         return;
     }
+    
     if (adEmail.endsWith("@ganziskola.hu") && adJelszo.length >= 6 && !(users.some(user => user.email === adEmail))) {
         users.push({ email: adEmail, jelszo: adJelszo, szerepkor: adSzerepkor });
+
+        localStorage.setItem('users', JSON.stringify(users));
+        
         showPopup("Sikeres fiók hozzáadás!", "green");
-        szamlalas++
-        document.getElementById("szamolas").innerHTML=`Összes felhasználó: ${szamlalas} db`
-        felhasznalok()
+        szamlalas++;
+        document.getElementById("szamolas").innerHTML = `Összes felhasználó: ${szamlalas} db`;
+        felhasznalok();
+        return;
+    }
+}
+
+function modositFelhasznalo(index) {
+    let ujEmail = document.getElementById(`email-${index}`).value.trim();
+    let ujJelszo = document.getElementById(`jelszo-${index}`).value.trim();
+    let ujSzerepkor = document.getElementById(`szerepkor-${index}`).value;
+
+    let user = users[index];
+    let adminCount = users.filter(u => u.szerepkor === "admin").length;
+    let utolso = (user.szerepkor === "admin" && adminCount === 1);
+
+    let emailMinta = /^[^@]+@ganziskola\.hu$/;
+    if (!emailMinta.test(ujEmail)) {
+        showPopup("Érvénytelen email! Csak @ganziskola.hu végződésű, érvényes email engedélyezett.", "red");
         return;
     }
     
-}
-function megerosites(rJelszo, rEmail) {
-    let megerosit = document.getElementById("megerosit").value;
-    if (megerosit !== rJelszo) {
-        showPopup("A jelszavak nem egyeznek!", "red");
+    if (ujJelszo.length < 6) {
+        showPopup("A jelszónak legalább 6 karakter hosszúnak kell lennie!", "red");
         return;
     }
-    users.push({ email: rEmail, jelszo: rJelszo, szerepkor: "tanuló" });
-    showPopup("Sikeres regisztráció!", "green");
-    szamlalas++
-    belepesOldal();
+    
+    if (users.some((u, i) => i !== index && u.email === ujEmail)) {
+        showPopup("Ez az email cím már egy másik felhasználónál használatban van!", "red");
+        return;
+    }
+
+    if (utolso && ujSzerepkor !== "admin") {
+        showPopup("Az egyetlen admin felhasználó szerepköre nem módosítható!", "red");
+        return;
+    }
+
+    users[index] = {
+        email: ujEmail,
+        jelszo: ujJelszo,
+        szerepkor: ujSzerepkor
+    };
+
+    localStorage.setItem('users', JSON.stringify(users));
+
+    if (bejelentkezettFelhasznalo.email === user.email) {
+        bejelentkezettFelhasznalo = users[index];
+        localStorage.setItem('bejelentkezettFelhasznalo', JSON.stringify(bejelentkezettFelhasznalo));
+    }
+
+    let ujAdminCount = users.filter(u => u.szerepkor === "admin").length;
+    if (ujAdminCount === 0) {
+        users[index].szerepkor = "admin";
+        showPopup("Legalább egy admin felhasználónak maradnia kell!", "red");
+    } else {
+        showPopup("Felhasználó módosítva!", "green");
+    }
+
+    document.getElementById("szkor").innerText = bejelentkezettFelhasznalo.szerepkor.toUpperCase();
+
+    if (bejelentkezettFelhasznalo.szerepkor === "admin") {
+        felhasznalok();
+    } else {
+        document.getElementById("titkos").innerHTML = `
+            <button class='fel' onclick='modositSajatJelszo()'>Jelszó módosítása</button>
+            <br><button class='visz' onclick='kijelentkezes()'>Kijelentkezés</button>`;
+    }
+}
+function toggleJelszoLathatosag() {
+    let jelszoMezo = document.getElementById("megtekint-jelszo");
+    jelszoMezo.type = jelszoMezo.type === "password" ? "text" : "password";
+}
+function modositSajatJelszo() {
+    if(!letezik){
+        letezik = true;
+        console.log(letezik);
+        let container = document.getElementById("titkos");
+        container.innerHTML += `
+            <div>
+                <p class="reg">Új jelszó: <input type="password" id="uj-jelszo"></p>
+                <button onclick="mentSajatJelszo()">Mentés</button>
+            </div>
+        `;
+    } else{
+        console.log(letezik);
+    }
 }
 function felhasznalok() {
     let list = document.getElementById("admin-panel");
@@ -225,112 +324,6 @@ function mutatFelhasznalo() {
         <hr>
     `;
 }
-function modositFelhasznalo(index) {
-    let ujEmail = document.getElementById(`email-${index}`).value.trim();
-    let ujJelszo = document.getElementById(`jelszo-${index}`).value.trim();
-    let ujSzerepkor = document.getElementById(`szerepkor-${index}`).value;
-
-    let user = users[index];
-    let adminCount = users.filter(u => u.szerepkor === "admin").length;
-    let utolso = (user.szerepkor === "admin" && adminCount === 1);
-
-    let emailMinta = /^[^@]+@ganziskola\.hu$/;
-    if (!emailMinta.test(ujEmail)) {
-        showPopup("Érvénytelen email! Csak @ganziskola.hu végződésű, érvényes email engedélyezett.", "red");
-        return;
-    }
-    if (ujJelszo.length < 6) {
-        showPopup("A jelszónak legalább 6 karakter hosszúnak kell lennie!", "red");
-        return;
-    }
-    if (users.some((u, i) => i !== index && u.email === ujEmail)) {
-        showPopup("Ez az email cím már egy másik felhasználónál használatban van!", "red");
-        return;
-    }
-
-    if (utolso && ujSzerepkor !== "admin") {
-        showPopup("Az egyetlen admin felhasználó szerepköre nem módosítható!", "red");
-        return;
-    }
-
-    users[index] = {
-        email: ujEmail,
-        jelszo: ujJelszo,
-        szerepkor: ujSzerepkor
-    };
-
-    if (bejelentkezettFelhasznalo.email === user.email) {
-        bejelentkezettFelhasznalo = users[index];
-    }
-
-    let ujAdminCount = users.filter(u => u.szerepkor === "admin").length;
-    if (ujAdminCount === 0) {
-        users[index].szerepkor = "admin";
-        showPopup("Legalább egy admin felhasználónak maradnia kell!", "red");
-    } else {
-        showPopup("Felhasználó módosítva!", "green");
-    }
-
-    document.getElementById("szkor").innerText = bejelentkezettFelhasznalo.szerepkor.toUpperCase();
-
-    if (bejelentkezettFelhasznalo.szerepkor === "admin") {
-        felhasznalok();
-    } else {
-        document.getElementById("titkos").innerHTML = `
-            <button class='fel' onclick='modositSajatJelszo()'>Jelszó módosítása</button>
-            <br><button class='visz' onclick='belepesOldal()'>Kijelentkezés</button>`;
-    }
-}
-function registerOldal() {
-    document.getElementById("container").innerHTML = `
-    <div id="regiszt">
-        <div id="form">
-            <form>
-                <h1>Regisztráció</h1>
-                <br>
-                <div>
-                    <label for="ujEmail">Email cím:</label><br>
-                    <input type="text" id="ujEmail"><br><br>
-                </div>
-            </form>
-            <div id="lent">
-                <form>  
-                    <label for="ujJelszo">Jelszó:</label><br>
-                    <input type="password" id="ujJelszo">
-                </form>
-                <br>
-                <button onclick="register()" id="belepes">Regisztráció</button><br><br><br>
-                <p class="reg">Van már fiókod?</p><button class="regi" onclick="belepesOldal()">Bejelentkezés</button>
-            </div>
-        </div>
-        <div id="titkos"></div>
-    </div>`;
-}
-function belepesOldal() {
-    document.getElementById("container").innerHTML = `
-    <div id="belep">
-        <div id="form">
-            <form>
-                <h1>Bejelentkezés</h1>
-                <br>
-                <div>
-                    <label for="email">Email cím:</label><br>
-                    <input type="text" id="email"><br><br>
-                </div>
-            </form>
-            <div>
-                <form>  
-                    <label for="jelszo">Jelszó:</label><br>
-                    <input type="password" id="jelszo">
-                </form>
-                <br>
-                <button onclick="belepes()" id="belepes">Bejelentkezés</button><br><br><br>
-                <p class="reg">Nincs még fiókod?</p><button class="regi" onclick="registerOldal()">Regisztráció</button>
-            </div>
-        </div>
-        <div id="titkos"></div>
-    </div>`;
-}
 function showPopup(message, color) {
     let popup = document.createElement("div");
     popup.innerText = message;
@@ -345,6 +338,7 @@ function showPopup(message, color) {
     popup.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
     popup.style.opacity = "1";
     popup.style.transition = "opacity 1s ease-out";
+    popup.style.zIndex = "1000";
     document.body.appendChild(popup);
 
     setTimeout(() => {

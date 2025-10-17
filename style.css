@@ -9,7 +9,7 @@ body{
     overflow-y: auto;
 }
 
-#belep, #regiszt, #admin-panel {
+#belep, #regiszt, #dashboard {
     border-radius: 10px;
     border: solid 2px black;
     width: 40%;
@@ -31,6 +31,61 @@ body{
 
 #regiszt {
     background-color: rgba(0, 255, 0, 0.2);
+}
+
+#dashboard {
+    background-color: rgba(255, 165, 0, 0.2);
+}
+
+#admin-panel {
+    background-color: rgba(255, 0, 0, 0.2);
+    width: 90%; 
+    max-width: 1000px; 
+    min-height: 500px; 
+    padding: 40px; 
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    transition: all 0.3s ease-in-out;
+    margin: 20px auto !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#dashboard {
+    border-radius: 10px;
+    border: solid 2px black;
+    width: 40%;
+    max-width: 600px;
+    min-height: 400px;
+    max-height: none;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgba(255, 165, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
 }
 
 #admin-panel {
@@ -83,7 +138,6 @@ body{
 #admin-panel button:hover {
     background: #cc4626;
 }
-
 
 #belepes, .regi, button {
     text-transform: uppercase;
@@ -142,13 +196,18 @@ select {
     width: 90%;
     text-align: center;
 }
+
 h2, h4{
     font-weight: normal;
 }
+
 footer{
     font-weight: normal;
     color: white;
+    margin-top: 20px;
+    padding: 20px;
 }
+
 footer>a{
     font-size: small;
     color: white;
@@ -160,11 +219,13 @@ footer>a{
     border-radius: 15px;
     font-weight: bold;
 }
+
 footer>a:hover{
     background: #004494;
 }
+
 @media (max-width: 600px) {
-    #belep, #regiszt, #admin-panel {
+    #belep, #regiszt, #dashboard {
         width: 95%;
         min-height: 300px;
         padding: 15px;

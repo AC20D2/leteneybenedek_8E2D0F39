@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regisztráció</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="regiszt">
+            <div id="form">
+                <form>
+                    <h1>Regisztráció</h1>
+                    <br>
+                    <div>
+                        <label for="ujEmail">Email cím:</label><br>
+                        <input type="text" id="ujEmail"><br><br>
+                    </div>
+                </form>
+                <div id="lent">
+                    <form>  
+                        <label for="ujJelszo">Jelszó:</label><br>
+                        <input type="password" id="ujJelszo">
+                    </form>
+                    <br>
+                    <button onclick="register()" id="belepes">Regisztráció</button><br><br><br>
+                    <p class="reg">Van már fiókod?</p>
+                    <button class="regi" onclick="location.href='login.html'">Bejelentkezés</button>
+                </div>
+            </div>
+            <div id="titkos"></div>
+        </div>
+    </div>
+
+    <footer>
+        <b>Készítette:</b><br><br>Leteney Benedek<br><br>
+        <a href="https://github.com/AC20D2">GitHub</a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
