@@ -1,0 +1,172 @@
+body{
+    background-color: gray;
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#belep, #regiszt, #admin-panel {
+    border-radius: 10px;
+    border: solid 2px black;
+    width: 40%;
+    max-width: 600px;
+    min-height: 400px;
+    max-height: none;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 255, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+#regiszt {
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+#admin-panel {
+    background-color: rgba(255, 0, 0, 0.2);
+    display: none;
+    width: 90%; 
+    max-width: 1000px; 
+    min-height: 500px; 
+    padding: 40px; 
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    transition: all 0.3s ease-in-out;
+}
+#user-select {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 2px solid black;
+    background: rgba(216, 216, 216, 0.7);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#user-select:hover {
+    background: rgba(216, 216, 216, 0.9);
+    border-color: #0056B3;
+}
+
+#user-form {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#admin-panel button {
+    background: #ff5733;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+#admin-panel button:hover {
+    background: #cc4626;
+}
+
+
+#belepes, .regi, button {
+    text-transform: uppercase;
+    background: #0056B3;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 15px;
+    font-size: small;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#belepes:hover, .regi:hover, button:hover {
+    background: #004494;
+}
+
+input {
+    background: rgba(216, 216, 216, 0.5);
+    border: none;
+    padding: 8px;
+    width: 90%;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.reg, .fel {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.regi, .visz {
+    margin-top: 10px;
+}
+
+button {
+    font-size: 16px;
+    padding: 10px 20px;
+}
+
+select {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(216, 216, 216, 0.5);
+    width: 90%;
+    text-align: center;
+}
+h2, h4{
+    font-weight: normal;
+}
+footer{
+    font-weight: normal;
+    color: white;
+}
+footer>a{
+    font-size: small;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    text-transform: uppercase;
+    background: #0056B3;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+}
+footer>a:hover{
+    background: #004494;
+}
+@media (max-width: 600px) {
+    #belep, #regiszt, #admin-panel {
+        width: 95%;
+        min-height: 300px;
+        padding: 15px;
+    }
+}
