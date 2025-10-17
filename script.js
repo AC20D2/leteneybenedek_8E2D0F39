@@ -93,11 +93,11 @@ function mentSajatJelszo() {
 function register() {
     let rEmail = document.getElementById("ujEmail").value;
     let rJelszo = document.getElementById("ujJelszo").value;
-    if (!rEmail.endsWith("@ganziskola.hu")) {
-        showPopup("Csak @ganziskola.hu végződésű email cím engedélyezett!", "red");
+    let emailMinta = /^[^@]+@ganziskola\.hu$/;
+    if (!emailMinta.test(rEmail)) {
+        showPopup("Érvénytelen email! Csak @ganziskola.hu végződésű, érvényes email engedélyezett.", "red");
         return;
     }
-
     if (rJelszo.length < 6) {
         showPopup("A jelszónak legalább 6 karakter hosszúnak kell lennie!", "red");
         return;
@@ -226,16 +226,30 @@ function mutatFelhasznalo() {
     `;
 }
 function modositFelhasznalo(index) {
-    let ujEmail = document.getElementById(`email-${index}`).value;
-    let ujJelszo = document.getElementById(`jelszo-${index}`).value;
+    let ujEmail = document.getElementById(`email-${index}`).value.trim();
+    let ujJelszo = document.getElementById(`jelszo-${index}`).value.trim();
     let ujSzerepkor = document.getElementById(`szerepkor-${index}`).value;
 
     let user = users[index];
     let adminCount = users.filter(u => u.szerepkor === "admin").length;
     let utolso = (user.szerepkor === "admin" && adminCount === 1);
-    
-    if (utolso &&ujSzerepkor !== "admin"){
-        showPopup("Az egyetlen admin felhasználó szerepköre nem módosítható!", "red")
+
+    let emailMinta = /^[^@]+@ganziskola\.hu$/;
+    if (!emailMinta.test(ujEmail)) {
+        showPopup("Érvénytelen email! Csak @ganziskola.hu végződésű, érvényes email engedélyezett.", "red");
+        return;
+    }
+    if (ujJelszo.length < 6) {
+        showPopup("A jelszónak legalább 6 karakter hosszúnak kell lennie!", "red");
+        return;
+    }
+    if (users.some((u, i) => i !== index && u.email === ujEmail)) {
+        showPopup("Ez az email cím már egy másik felhasználónál használatban van!", "red");
+        return;
+    }
+
+    if (utolso && ujSzerepkor !== "admin") {
+        showPopup("Az egyetlen admin felhasználó szerepköre nem módosítható!", "red");
         return;
     }
 
@@ -246,27 +260,26 @@ function modositFelhasznalo(index) {
     };
 
     if (bejelentkezettFelhasznalo.email === user.email) {
-        bejelentkezettFelhasznalo = user;
+        bejelentkezettFelhasznalo = users[index];
     }
 
     let ujAdminCount = users.filter(u => u.szerepkor === "admin").length;
-    console.log(ujAdminCount)
     if (ujAdminCount === 0) {
         users[index].szerepkor = "admin";
         showPopup("Legalább egy admin felhasználónak maradnia kell!", "red");
     } else {
         showPopup("Felhasználó módosítva!", "green");
     }
+
     document.getElementById("szkor").innerText = bejelentkezettFelhasznalo.szerepkor.toUpperCase();
 
     if (bejelentkezettFelhasznalo.szerepkor === "admin") {
-        felhasznalok()
+        felhasznalok();
     } else {
         document.getElementById("titkos").innerHTML = `
             <button class='fel' onclick='modositSajatJelszo()'>Jelszó módosítása</button>
             <br><button class='visz' onclick='belepesOldal()'>Kijelentkezés</button>`;
     }
-    console.log(users)
 }
 function registerOldal() {
     document.getElementById("container").innerHTML = `
